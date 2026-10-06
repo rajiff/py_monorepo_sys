@@ -50,5 +50,5 @@ You can run the application using `uvicorn`. Since the FastAPI app is defined in
 
 ```bash
 # Using uvicorn directly
-uv run uvicorn app.main:app --reload
+uv run uvicorn src/app.main:app --reload
 ```
