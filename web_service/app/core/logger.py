@@ -6,7 +6,7 @@ logger = logging.getLogger("app_name_here")
 logger.propagate = False
 
 log_formatter = logging.Formatter(
-    fmt='%(asctime)s %(levelname)s %(message)s',
+    fmt='%(asctime)s %(levelname)s [%(name)s] %(message)s',
 )
 
 log_stdout_handler = logging.StreamHandler(sys.stdout)

@@ -1,6 +1,7 @@
 ## Project layout
 
 - Refer [Anatomy of a Scalable Python Project (FastAPI)](https://youtu.be/Af6Zr0tNNdE?si=z06UFfdJ5pXXd9nR) by [@ArjanCodes](https://www.youtube.com/@ArjanCodes)
+- Also refer example [template](https://github.com/jmcmeen/python-backend) based on medium [article](https://medium.com/the-pythonworld/the-architecture-blueprint-every-python-backend-project-needs-207216931123?sharedUserId=basavarajkn) 
 
 ```text
 my_project/
