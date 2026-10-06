@@ -1,0 +1,53 @@
+[project]
+name = "mt-db-conn"
+version = "0.1.0"
+description = "Multi tenant backend service in Python"
+readme = "README.md"
+authors = [
+    { name = "Basavaraj K N", email = "rajiff@gmail.com" }
+]
+requires-python = ">=3.12"
+
+dependencies = [
+    "fastapi[standard]>=0.142.2",
+]
+
+[project.scripts]
+my-app = "app.main:main"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "ruff>=0.16.10",
+]
+
+[tool.uv]
+package = false
+
+[tool.pylint.main]
+# Tells Pylint to look at your root directory or specific source folders
+init-hook = "import sys; import os; sys.path.append(os.path.abspath('.'))"
+# Specify the files or directories to lint
+ignore = ["tests", "scripts", "logs", "grafana", "qdrant_storage"]
+
+[tool.pylint.messages_control]
+# Disable specific lint errors if needed
+disable = [
+    "C0114", # missing-module-docstring
+    "C0115", # missing-class-docstring
+    "R0903", # Too few public methods
+    "E0401", # Unable to import,
+    "W0718", # Catching too general exception Exception
+    "R0914", # Too many local variables
+    "R0902", # Too many instance attributes
+    "R0801", # Similar lines in 2 files
+]
+
+[tool.ruff.lint]
+# Enable standard lints (E, F) along with ASYNC rules
+select = ["E", "F", "ASYNC"]
+
+[tool.pylint.format]
+max-line-length = 120
