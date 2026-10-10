@@ -1,9 +1,19 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.api.v1.routes import api_router as api_v1_router
 
 from app.core.config import config
 from app.core.logger import logger
+
+@asynccontextmanager
+async def lifespan(_):
+    """Lifecycle management for the FastAPI application."""
+    # STARTUP
+    logger.info("*** Starting service: %s", config.SERVICE_NAME)
+    yield
+    # SHUTDOWN
+    logger.info("*** Shutting down service: %s", config.SERVICE_NAME)
 
 app = FastAPI(title=config.SERVICE_NAME,
               description=config.SERVICE_DESC)
