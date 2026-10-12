@@ -16,7 +16,7 @@ async def lifespan(_):
     logger.info("*** Shutting down service: %s", config.SERVICE_NAME)
 
 app = FastAPI(title=config.SERVICE_NAME,
-              description=config.SERVICE_DESC)
+               description=config.SERVICE_DESC)
 
 logger.info(
     "Service %s starting..!",
@@ -25,9 +25,3 @@ logger.info(
 
 # Include the V1 API routes
 app.include_router(api_v1_router, prefix="/api/v1")
-app.include_router(api_v1_router, prefix="/api/v1")
-
-@app.get("/health", tags=["Health"])
-async def health_check():
-    """Basic health check endpoint to verify service availability."""
-    return {"status": "ok"}

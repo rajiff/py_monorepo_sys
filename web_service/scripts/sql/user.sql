@@ -52,3 +52,10 @@ WHERE
     table_name = 'users';
 
 select * from users
+
+-- insert a mock user to users table using insert script
+INSERT INTO users (username, email,
+    city, pincode, name)
+    VALUES ('testuser', 'testuser@example.com',
+    'New York', '10001,
+    12345', 'Test User');
