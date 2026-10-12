@@ -1,7 +1,7 @@
 from typing import Optional
 from uuid import UUID
-from datetime import datetime, UTC
-from pydantic import BaseModel, ConfigDict, EmailStr
+from datetime import datetime
+from pydantic import ConfigDict, EmailStr
 from pydantic.fields import Field
 from sqlmodel import SQLModel
 

@@ -1,8 +1,7 @@
+from typing import Any
 from fastapi import APIRouter
 from sqlalchemy import text
 from app.db.session import get_session
-from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Any
 
 router = APIRouter(prefix="/health", tags=["Health"])
 

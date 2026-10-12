@@ -6,6 +6,9 @@ from logging.handlers import RotatingFileHandler
 from app.core.config import config
 
 def setup_logging():
+    """
+    Initialize and configure the application logging system.
+    """
     _logger = logging.getLogger(config.APP_NAME)
     _logger.setLevel(config.LOG_LEVEL)
     _logger.propagate = False
@@ -45,7 +48,7 @@ def setup_logging():
     # file_handler.setFormatter(json_formatter)
     file_handler.setFormatter(console_formatter)
 
-     # Add handlers
+    # Add handlers
     _logger.addHandler(stdout_handler)
     _logger.addHandler(file_handler)
 

@@ -2,7 +2,6 @@ from typing import Optional
 from datetime import datetime, UTC
 from uuid import UUID, uuid4
 from sqlmodel import Field, SQLModel
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy import DateTime, text
 
 class User(SQLModel, table=True):

@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 from uuid import UUID
 from fastapi import HTTPException, status
 from app.repositories.user import UserRepository
@@ -9,6 +9,9 @@ class UserService:
         self.repository = repository
 
     async def get_user_by_id(self, user_id: UUID) -> UserRead:
+        """
+        Retrieve a user by their ID.
+        """
         user = await self.repository.get_by_id(user_id)
         if not user:
             raise HTTPException(
@@ -18,6 +21,9 @@ class UserService:
         return user
 
     async def get_user_by_email(self, email: str) -> UserRead:
+        """
+        Retrieve a user by their email address.
+        """
         user = await self.repository.get_by_email(email)
         if not user:
             raise HTTPException(
@@ -27,6 +33,9 @@ class UserService:
         return user
 
     async def create_user(self, user_data: UserCreate) -> UserRead:
+        """
+        Create a new user record.
+        """
         # Business logic: Check if email is already registered
         existing_user = await self.repository.get_by_email(user_data.email)
         if existing_user:
@@ -39,6 +48,9 @@ class UserService:
         return user
 
     async def update_user(self, user_id: UUID, update_data: UserUpdate) -> UserRead:
+        """
+        Update an existing user record.
+        """
         user = await self.repository.get_by_id(user_id)
         if not user:
             raise HTTPException(
