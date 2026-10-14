@@ -31,7 +31,7 @@ class DatabaseConfig(BaseSettings):
     DB_STATEMENT_TIMEOUT: float = Field(default=1.0)
 
     # Need to avoid sensitive SQL parameter logging
-    DB_SQL_LOGGING: bool = Field(default=False)
+    DB_ECHO_SQL_LOGGING: bool = Field(default=False)
 
 
     # Allow passing an explicit URL, fallback to None to trigger the validator

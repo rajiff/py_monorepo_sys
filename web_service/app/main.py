@@ -1,27 +1,31 @@
-from contextlib import asynccontextmanager
+from contextlib import AsyncExitStack, asynccontextmanager
 from fastapi import FastAPI
 
 from app.api.v1.routes import api_router as api_v1_router
 
 from app.core.config import config
-from app.core.logger import logger
+from app.core.db_config import DatabaseConfig
+
+from app.core.logger import logger_lifespan
+from app.core.database import db_engine_lifespan
 
 @asynccontextmanager
-async def lifespan(_):
+async def app_lifespan(app: FastAPI):
     """Lifecycle management for the FastAPI application."""
-    # STARTUP
-    logger.info("*** Starting service: %s", config.SERVICE_NAME)
-    yield
-    # SHUTDOWN
-    logger.info("*** Shutting down service: %s", config.SERVICE_NAME)
 
-app = FastAPI(title=config.SERVICE_NAME,
-               description=config.SERVICE_DESC)
+    db_settings = DatabaseConfig()
 
-logger.info(
-    "Service %s starting..!",
-    config.SERVICE_NAME
-)
+    async with AsyncExitStack() as stack:
+        await stack.enter_async_context(logger_lifespan(app)) # logger first
+        await stack.enter_async_context(db_engine_lifespan(app, db_settings))
+
+        yield
+
+app = FastAPI(
+        title=config.SERVICE_NAME,
+        description=config.SERVICE_DESC,
+        lifespan=app_lifespan
+    )
 
 # Include the V1 API routes
 app.include_router(api_v1_router, prefix="/api/v1")

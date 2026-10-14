@@ -3,6 +3,9 @@ import sys
 import os
 from logging.handlers import RotatingFileHandler
 
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+
 from app.core.config import config
 
 def setup_logging():
@@ -54,7 +57,25 @@ def setup_logging():
 
     return _logger
 
+async def shutdown_logger():
+    """Shudown logger at the end of application lifecycle."""
+    return
+
+@asynccontextmanager
+async def logger_lifespan(app: FastAPI):
+    """Lifecycle management for the applicaiton logger."""
+
+    logger = setup_logging()
+    logger.info("*** Starting service: %s", config.SERVICE_NAME)
+
+    app.state.logger = logger
+    try:
+        yield
+    finally:
+        logger.info("*** Shutting down service: %s", config.SERVICE_NAME)
+        shutdown_logger()
+
 # @TODO use https://pypi.org/project/python-logging-loki-v2/ to push logs to loki
 
 # Initialize and export
-logger = setup_logging()
+# logger = setup_logging()

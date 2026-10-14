@@ -56,3 +56,4 @@ You can run the application using `uvicorn`. Since the FastAPI app is defined in
 # Using uvicorn directly
 uv run uvicorn app.main:app --reload
 ```
+
