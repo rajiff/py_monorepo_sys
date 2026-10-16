@@ -1,43 +1,59 @@
-from typing import Optional
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from uuid import UUID, uuid4
+
+from sqlalchemy import DateTime, Index, String, func, text
 from sqlmodel import Field, SQLModel
-from sqlalchemy import DateTime, text
+
+USER_EMAIL_UNIQUE_CONSTRAINT_NAME = "uq_users_email_ci"
+USER_USERNAME_UNIQUE_CONSTRAINT_NAME = "uq_users_username_ci"
 
 class User(SQLModel, table=True):
     __tablename__ = "users"
-    # __primary_key=True
 
-    # Note: We use PG_UUID for the type hint but default to UUID for compatibility
+    # PostgreSQL creates an index for the primary key automatically.
     user_id: UUID = Field(
         default_factory=uuid4,
         primary_key=True,
-        index=True,
-        nullable=False
+        nullable=False,
+        sa_column_kwargs={
+            "server_default": text("uuidv4()"),
+        },
     )
 
-    # Multi-tenancy Field
-    # tenant_id: UUID = Field(sa_type=PG_UUID, nullable=False, indexing=True)
+    # Uniqueness is enforced case-insensitively by the indexes below.
+    username: str = Field(nullable=False)
+    email: str = Field(nullable=False)
 
-    username: str = Field(unique=True, nullable=False)
-    email: str = Field(unique=True, nullable=False)
-    name: Optional[str] = None
-    phone: Optional[str] = None
-    city: Optional[str] = None
-    pincode: Optional[str] = None
+    name: str | None = Field(default=None)
+    phone: str | None = Field(default=None, sa_type=String(20))
+    city: str | None = Field(default=None, sa_type=String(255))
+    pincode: str | None = Field(default=None, sa_type=String(10))
 
-    # Metadata fields
     created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC),  # ✅ Generates fresh time on creation
-        sa_type=DateTime(timezone=True),  # ✅ Correctly sets TIMESTAMPTZ type
-        sa_column_kwargs={"server_default": text("NOW()")}  # ✅ Safe place for raw SQL text
+        default_factory=lambda: datetime.now(UTC),
+        sa_type=DateTime(timezone=True),
+        sa_column_kwargs={"server_default": text("NOW()")},
     )
 
     updated_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC),  # ✅ Generates fresh time on creation
-        sa_type=DateTime(timezone=True),  # ✅ Correctly sets TIMESTAMPTZ type
+        default_factory=lambda: datetime.now(UTC),
+        sa_type=DateTime(timezone=True),
         sa_column_kwargs={
             "server_default": text("NOW()"),
-            "onupdate": text("NOW()")  # ✅ Automatically updates on row modification
-        }
+            "onupdate": text("NOW()"),
+        },
     )
+
+
+# PostgreSQL expression indexes enforce case-insensitive uniqueness.
+Index(
+    USER_USERNAME_UNIQUE_CONSTRAINT_NAME,
+    func.lower(User.username),
+    unique=True,
+)
+
+Index(
+    USER_EMAIL_UNIQUE_CONSTRAINT_NAME,
+    func.lower(User.email),
+    unique=True,
+)

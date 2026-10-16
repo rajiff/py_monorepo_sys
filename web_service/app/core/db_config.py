@@ -19,7 +19,7 @@ class DatabaseConfig(BaseSettings):
 
 
     # Wait for a free pooled connection	- 3–5 seconds
-    DB_POOL_TIMEOUT: float = Field(default=3.0)
+    DB_POOL_TIMEOUT: float = Field(default=5.0)
 
     # Establish a new database connection -	5–10 seconds
     DB_CONNECT_TIMEOUT: float = Field(default=5.0)

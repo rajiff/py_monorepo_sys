@@ -93,7 +93,10 @@ async def db_engine_lifespan(app: FastAPI, settings: DatabaseConfig):
         bind=engine,
         class_=AsyncSession,
         expire_on_commit=False, # ORM attributes are not automatically expired after commit
-        # autoflush=False,
+        # autoflush=False, # Pending ORM changes flush before applicable queries
+        # autobegin=False, # Database operations can automatically begin a transaction
+        # autocommit=False, # Legacy autocommit mode is disabled
+        # close_resets_only=True # Closing resets the session for possible reuse rather than permanently disabling it
     )
 
     try:

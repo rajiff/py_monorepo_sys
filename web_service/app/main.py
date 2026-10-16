@@ -7,7 +7,7 @@ from app.core.config import config
 from app.core.db_config import DatabaseConfig
 
 from app.core.logger import logger_lifespan
-from app.core.database import db_engine_lifespan
+from app.db.database import db_engine_lifespan
 
 @asynccontextmanager
 async def app_lifespan(app: FastAPI):
@@ -15,6 +15,7 @@ async def app_lifespan(app: FastAPI):
 
     db_settings = DatabaseConfig()
 
+    # this helps handle multiple lifecycle related tasks
     async with AsyncExitStack() as stack:
         await stack.enter_async_context(logger_lifespan(app)) # logger first
         await stack.enter_async_context(db_engine_lifespan(app, db_settings))
