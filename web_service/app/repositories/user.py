@@ -7,10 +7,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import SQLModel
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
+from app.core.logger import logger
 
 class UserRepository:
     def __init__(self, session: AsyncSession):
         self.__session = session
+        self.logger = logger
 
     @asynccontextmanager
     async def transaction(self) -> AsyncIterator[None]:
@@ -79,5 +81,13 @@ class UserRepository:
             .execution_options(synchronize_session=False)
         )
 
-        result = await self.__session.execute(statement)
-        return result.scalar_one_or_none()
+        try:
+            result = await self.__session.execute(statement)
+            return result.scalar_one_or_none()
+        except Exception as exc:
+            self.logger.error(
+                "Database error during update for user %s: %s",
+                user_id,
+                exc,
+                exc_info=True)
+            raise

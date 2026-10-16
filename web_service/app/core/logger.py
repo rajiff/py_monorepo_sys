@@ -22,7 +22,6 @@ def setup_logging():
             _logger.removeHandler(handler)
 
     # Standard Format for Console (Human Readable)
-    # Keep this for local development
     console_formatter = logging.Formatter(
         fmt='%(asctime)s [%(levelname)s] %(name)s: %(message)s'
     )
@@ -57,17 +56,20 @@ def setup_logging():
 
     return _logger
 
+# Initialize and export the default logger instance
+logger = setup_logging()
+
 async def shutdown_logger():
     """Shudown logger at the end of application lifecycle."""
-    return
+    logger_obj = logging.getLogger(config.APP_NAME)
+    for handler in logger_obj.handlers[:]:
+        handler.close()
+        logger_obj.removeHandler(handler)
 
 @asynccontextmanager
 async def logger_lifespan(app: FastAPI):
     """Lifecycle management for the applicaiton logger."""
-
-    logger = setup_logging()
     logger.info("*** Starting service: %s", config.SERVICE_NAME)
-
     app.state.logger = logger
     try:
         yield
