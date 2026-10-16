@@ -4,7 +4,6 @@ from typing import Optional
 from uuid import UUID
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import SQLModel
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
 from app.core.logger import logger
