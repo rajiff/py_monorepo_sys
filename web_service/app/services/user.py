@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.exc import IntegrityError
 from app.repositories.user import UserRepository
 from app.schemas.user import UserCreate, UserRead, UserUpdate
-from app.models.user import USER_EMAIL_UNIQUE_CONSTRAINT_NAME
+from app.models.user import IDX_USERS_UNIQUE_EMAIL
 from app.core.logger import logger
 
 class UserService:
@@ -146,5 +146,5 @@ def get_postgres_constraint_name(exc: IntegrityError) -> str | None:
     return name
 
 def _is_email_unique_violation(exc: IntegrityError) -> bool:
-    return get_postgres_constraint_name(exc) == USER_EMAIL_UNIQUE_CONSTRAINT_NAME
+    return get_postgres_constraint_name(exc) == IDX_USERS_UNIQUE_EMAIL
 

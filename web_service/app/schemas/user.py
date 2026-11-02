@@ -14,6 +14,7 @@ class UserBase(SQLModel):
     phone: Optional[str] = None
     city: Optional[str] = None
     pincode: Optional[str] = None
+    country: Optional[str] = None
 
 class UserCreate(UserBase):
     pass
@@ -25,9 +26,12 @@ class UserUpdate(SQLModel):
     phone: Optional[str] = None
     city: Optional[str] = None
     pincode: Optional[str] = None
+    country: Optional[str] = None
 
 class UserRead(UserBase):
     user_id: UUID
+    username: str
+    name: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
